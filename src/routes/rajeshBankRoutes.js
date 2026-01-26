@@ -8,7 +8,8 @@ import {
     managerSubmitRajeshBank,
     requestReworkRajeshBank,
     deleteRajeshBank,
-    deleteMultipleRajeshBank
+    deleteMultipleRajeshBank,
+    getLastSubmittedRajeshBank
 } from "../controllers/rajeshBankController.js";
 import { authMiddleware, isManagerOrAdmin } from "../middleware/authMiddleware.js";
 
@@ -30,6 +31,9 @@ router.post("", authMiddleware, createRajeshBank);
 
 // Get all Rajesh Bank forms (with role-based filtering)
 router.get("", authMiddleware, getAllRajeshBank);
+
+// Get last submitted form for autofilling
+router.get("/last-form/prefill", authMiddleware, getLastSubmittedRajeshBank);
 
 // Get by ID
 router.get("/:id", authMiddleware, getRajeshBankById);

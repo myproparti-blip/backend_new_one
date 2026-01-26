@@ -8,7 +8,8 @@ import {
     managerSubmitRajeshFlat,
     requestReworkRajeshFlat,
     deleteRajeshFlat,
-    deleteMultipleRajeshFlat
+    deleteMultipleRajeshFlat,
+    getLastSubmittedRajeshFlat
 } from "../controllers/rajeshFlatController.js";
 import { authMiddleware, isManagerOrAdmin } from "../middleware/authMiddleware.js";
 
@@ -30,6 +31,11 @@ router.post("", authMiddleware, createRajeshFlat);
 
 // Get all Rajesh Flat forms (with role-based filtering)
 router.get("", authMiddleware, getAllRajeshFlat);
+
+
+// Get last submitted form for autofilling
+router.get("/last-form/prefill", authMiddleware, getLastSubmittedRajeshFlat);
+
 
 // Get by ID
 router.get("/:id", authMiddleware, getRajeshFlatById);

@@ -778,3 +778,51 @@ export const deleteMultipleRajeshBank = async (req, res) => {
         });
     }
 };
+
+// GET LAST SAVED RAJESH BANK FORM FOR PREFILLING
+export const getLastSubmittedRajeshBank = async (req, res) => {
+    try {
+        const clientId = req.user?.clientId;
+        const username = req.user?.username;
+
+        if (!clientId) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized - Missing client information"
+            });
+        }
+
+        // Find the most recently updated/saved form for this client/user (any status)
+        const lastSavedForm = await RajeshBankModel.findOne({
+            clientId,
+            username
+        }).sort({ updatedAt: -1, createdAt: -1 }).lean();
+
+        if (!lastSavedForm) {
+            return res.status(200).json({
+                success: true,
+                message: "No previously saved form found",
+                data: null
+            });
+        }
+
+        console.log("[getLastSubmittedRajeshBank] Found last saved form:", {
+            uniqueId: lastSavedForm.uniqueId,
+            status: lastSavedForm.status,
+            updatedAt: lastSavedForm.updatedAt
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Last saved form retrieved successfully",
+            data: lastSavedForm
+        });
+    } catch (error) {
+        console.error("[getLastSubmittedRajeshBank] Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve last saved form",
+            error: error.message
+        });
+    }
+};

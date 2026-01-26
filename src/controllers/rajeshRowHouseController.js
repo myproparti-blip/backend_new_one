@@ -778,3 +778,42 @@ export const deleteMultipleRajeshRowHouse = async (req, res) => {
         });
     }
 };
+export const getLastSubmittedRajeshRowHouse = async (req, res) => {
+    try {
+        const { username, clientId } = req.query;
+
+        if (!username || !clientId) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required parameters: username and clientId"
+            });
+        }
+
+        // Get the most recent submitted form for this user
+        const lastForm = await RajeshRowHouseModel.findOne({
+            username,
+            clientId
+        })
+        .sort({ createdAt: -1 })
+        .lean();
+
+        if (!lastForm) {
+            return res.status(404).json({
+                success: false,
+                message: "No previous form found for autofill"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: lastForm
+        });
+    } catch (error) {
+        console.error("[getLastSubmittedRajeshRowHouse] Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch last submitted form",
+            error: error.message
+        });
+    }
+};

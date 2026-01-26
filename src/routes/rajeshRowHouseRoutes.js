@@ -8,7 +8,8 @@ import {
     managerSubmitRajeshRowHouse,
     requestReworkRajeshRowHouse,
     deleteRajeshRowHouse,
-    deleteMultipleRajeshRowHouse
+    deleteMultipleRajeshRowHouse,
+    getLastSubmittedRajeshRowHouse
 } from "../controllers/rajeshRowHouseController.js";
 import { authMiddleware, isManagerOrAdmin } from "../middleware/authMiddleware.js";
 
@@ -31,6 +32,8 @@ router.post("", authMiddleware, createRajeshRowHouse);
 // Get all Rajesh RowHouse forms (with role-based filtering)
 router.get("", authMiddleware, getAllRajeshRowHouse);
 
+// Get last submitted form for autofilling
+router.get("/last-form/prefill", authMiddleware, getLastSubmittedRajeshRowHouse);
 // Get by ID
 router.get("/:id", authMiddleware, getRajeshRowHouseById);
 

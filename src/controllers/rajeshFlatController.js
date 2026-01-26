@@ -740,46 +740,86 @@ export const deleteRajeshFlat = async (req, res) => {
 };
 
 export const deleteMultipleRajeshFlat = async (req, res) => {
-    try {
-        const { ids } = req.body;
-        const clientId = req.user?.clientId;
-        const username = req.user?.username;
+     try {
+         const { ids } = req.body;
+         const clientId = req.user?.clientId;
+         const username = req.user?.username;
 
-        if (!Array.isArray(ids) || ids.length === 0) {
+         if (!Array.isArray(ids) || ids.length === 0) {
+             return res.status(400).json({
+                 success: false,
+                 message: "Invalid request - ids must be a non-empty array"
+             });
+         }
+
+         if (!clientId) {
+             return res.status(401).json({
+                 success: false,
+                 message: "Unauthorized - Missing client information"
+             });
+         }
+
+         // Delete multiple records
+         const result = await RajeshFlatModel.deleteMany({
+             $or: [
+                 { _id: { $in: ids } },
+                 { uniqueId: { $in: ids.map(String) } }
+             ],
+             clientId: clientId
+         });
+
+         (`[deleteMultipleRajeshFlat] Deleted by ${username}:`, { count: result.deletedCount, clientId: clientId.substring(0, 8) + "..." });
+
+         res.status(200).json({
+             success: true,
+             message: `Deleted ${result.deletedCount} Rajesh RowHouse record(s)`,
+             deletedCount: result.deletedCount
+         });
+     } catch (error) {
+         console.error("[deleteMultipleRajeshFlat] Error:", error);
+         res.status(500).json({
+             success: false,
+             message: "Failed to delete Rajesh RowHouse forms",
+             error: error.message
+         });
+     }
+};
+
+export const getLastSubmittedRajeshFlat = async (req, res) => {
+    try {
+        const { username, clientId } = req.query;
+
+        if (!username || !clientId) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid request - ids must be a non-empty array"
+                message: "Missing required parameters: username and clientId"
             });
         }
 
-        if (!clientId) {
-            return res.status(401).json({
+        // Get the most recent submitted form for this user
+        const lastForm = await RajeshFlatModel.findOne({
+            username,
+            clientId
+        })
+        .sort({ createdAt: -1 })
+        .lean();
+
+        if (!lastForm) {
+            return res.status(404).json({
                 success: false,
-                message: "Unauthorized - Missing client information"
+                message: "No previous form found for autofill"
             });
         }
-
-        // Delete multiple records
-        const result = await RajeshFlatModel.deleteMany({
-            $or: [
-                { _id: { $in: ids } },
-                { uniqueId: { $in: ids.map(String) } }
-            ],
-            clientId: clientId
-        });
-
-        (`[deleteMultipleRajeshFlat] Deleted by ${username}:`, { count: result.deletedCount, clientId: clientId.substring(0, 8) + "..." });
 
         res.status(200).json({
             success: true,
-            message: `Deleted ${result.deletedCount} Rajesh RowHouse record(s)`,
-            deletedCount: result.deletedCount
+            data: lastForm
         });
     } catch (error) {
-        console.error("[deleteMultipleRajeshFlat] Error:", error);
+        console.error("[getLastSubmittedRajeshFlat] Error:", error);
         res.status(500).json({
             success: false,
-            message: "Failed to delete Rajesh RowHouse forms",
+            message: "Failed to fetch last submitted form",
             error: error.message
         });
     }
