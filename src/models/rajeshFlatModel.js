@@ -211,42 +211,6 @@ const certificationDetailsSchema = new mongoose.Schema(
     { _id: false }
 );
 
-const documentChecklistSchema = new mongoose.Schema(
-    {
-        engagementLetterConfirmation: { type: String, default: "" },
-        ownershipDocumentsSaleDeedConveyance: { type: String, default: "" },
-        advTcrLsr: { type: String, default: "" },
-        agreementForSaleBanaKhat: { type: String, default: "" },
-        propertyCard: { type: String, default: "" },
-        mortgageDeed: { type: String, default: "" },
-        leaseDeed: { type: String, default: "" },
-        indexMinusTwo: { type: String, default: "" },
-        vfSevenTwelveInCaseOfLand: { type: String, default: "" },
-        naOrder: { type: String, default: "" },
-        approvedLayoutPlan: { type: String, default: "" },
-        commencementLetter: { type: String, default: "" },
-        buPermission: { type: String, default: "" },
-        eleMeterPhoto: { type: String, default: "" },
-        lightBill: { type: String, default: "" },
-        muniTaxBill: { type: String, default: "" },
-        numberingFlatBungalowPlotNo: { type: String, default: "" },
-        boundariesOfPropertyProperDemarcation: { type: String, default: "" },
-        mergedProperty: { type: String, default: "" },
-        premiseCanBeSeparatedAndEntrance: { type: String, default: "" },
-        landIsLocked: { type: String, default: "" },
-        propertyIsRentedToOtherParty: { type: String, default: "" },
-        ifRentedRentAgreementProvided: { type: String, default: "" },
-        siteVisitPhotos: { type: String, default: "" },
-        selfieWithOwnerIdentifier: { type: String, default: "" },
-        mobileNo: { type: String, default: "" },
-        dataSheet: { type: String, default: "" },
-        tentativeRate: { type: String, default: "" },
-        saleInstanceLocalInquiryVerbalSurvey: { type: String, default: "" },
-        brokerRecording: { type: String, default: "" },
-        pastValuationRate: { type: String, default: "" }
-    },
-    { _id: false }
-);
 
 const appointmentAndDatesSchema = new mongoose.Schema(
     {
@@ -425,7 +389,6 @@ const valuationComputationSchema = new mongoose.Schema(
 const documentationSchema = new mongoose.Schema(
     {
         documents: { type: documentsSchema, default: () => ({}) },
-        documentChecklist: { type: documentChecklistSchema, default: () => ({}) },
         declarationDetails: { type: declarationDetailsSchema, default: () => ({}) }
     },
     { _id: false }

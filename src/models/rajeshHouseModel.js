@@ -260,31 +260,6 @@ const briefDescriptionSchema = new mongoose.Schema({
     totalMarketValue: { type: String, default: "" },
     insurableValue: { type: String, default: "" }
 }, { _id: false });
-
-const buildingValuationSchema = new mongoose.Schema({
-    typeOfBuilding: { type: String, default: "" },
-    typeOfConstruction: { type: String, default: "" },
-    yearOfConstruction: { type: String, default: "" },
-    numberOfFloors: { type: String, default: "" },
-    plinthAreaFloorWise: { type: String, default: "" },
-    conditionOfBuilding: { type: String, default: "" },
-    exteriorCondition: { type: String, default: "" },
-    interiorCondition: { type: String, default: "" },
-    dateOfIssueValidity: { type: String, default: "" },
-    approvedMapAuthority: { type: String, default: "" },
-    genuinessAuthenticity: { type: String, default: "" },
-    otherComments: { type: String, default: "" }
-}, { _id: false });
-
-const landValuationDetailsSchema = new mongoose.Schema({
-    plot: { type: String, default: "Land Area" },
-    areaSqYd: { type: String, default: "" },
-    rate: { type: String, default: "" },
-    total: { type: String, default: "" }
-}, { _id: false });
-
-
-
 const buildingDetailsSchema = new mongoose.Schema({
     typeOfBuilding: { type: String, default: "" },
     typeOfConstruction: { type: String, default: "" },
