@@ -130,7 +130,7 @@ import bofMaharastraRoutes from "./src/routes/bomFlatRoutes.js";
 
 app.use("/api/valuations", valuationRoutes);
 app.use("/api/rajesh-house", rajeshHouseRoutes);
-app.use("/api/rajesh-rowhouse", rajeshRowHouseRoutes);
+app.use("/api/rajesh-row-house", rajeshRowHouseRoutes);
 
 app.use("/api/rajesh-bank", rajeshBankRoutes);
 app.use("/api/rajesh-flat", rajeshFlatRoutes);
