@@ -5,6 +5,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import compression from "compression";
 import connectDB from "./src/config/db.js";
 
 // ---------------------------------------------------
@@ -40,6 +41,16 @@ async function connectDatabase() {
 
   return globalConnection;
 }
+
+// ---------------------------------------------------
+// COMPRESSION (must be before all routes and middleware)
+// ---------------------------------------------------
+app.use(
+  compression({
+    level: 6,
+    threshold: 0,
+  })
+);
 
 // ---------------------------------------------------
 // CORS
