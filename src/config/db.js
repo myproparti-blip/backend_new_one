@@ -12,7 +12,7 @@ const connectDB = async () => {
 
   // Log URI (hide password)
   const hiddenUri = uri.replace(/([^:]*):([^@]*)@/, "$1:****@");
-  ("🔗 Connecting to MongoDB:", hiddenUri);
+  console.log("🔗 Connecting to MongoDB:", hiddenUri);
 
   // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
   if (mongoose.connection.readyState === 1) {
@@ -32,20 +32,37 @@ const connectDB = async () => {
 
   connectionPromise = mongoose
     .connect(uri, {
-      // Keep options minimal & sane
+      // ===== CONNECTION POOLING =====
+      // Optimized for Vercel (serverless) and Render (containerized)
+      maxPoolSize: 10, // Maximum concurrent connections
+      minPoolSize: 2, // Minimum warm connections to maintain
+      maxIdleTimeMS: 60000, // Close idle connections after 60s
+
+      // ===== TIMEOUT CONFIGURATION =====
+      // Fail fast instead of hanging indefinitely
       serverSelectionTimeoutMS: 10000, // 10s to find a server
-      maxPoolSize: 10,
-      retryWrites: true,
-      w: "majority",
-      family: 4,
+      socketTimeoutMS: 45000, // 45s socket timeout for long-running ops
+      connectTimeoutMS: 10000, // 10s to establish TCP connection
+      waitQueueTimeoutMS: 10000, // 10s to wait for available connection in pool
+
+      // ===== RETRY & RELIABILITY =====
+      retryWrites: true, // Automatic retry on transient errors
+      w: "majority", // Write concern for data consistency
+      family: 4, // IPv4 only (more stable in containerized envs)
+
+      // ===== SERVERLESS OPTIMIZATION =====
+      // Prevent connection refresh storms in serverless
+      heartbeatFrequencyMS: 30000, // Check server health every 30s
     })
     .then((m) => {
       isConnecting = false;
+      console.log("✅ MongoDB Connected – Connection Pool Active");
       return m;
     })
     .catch((err) => {
       isConnecting = false;
       connectionPromise = null;
+      console.error("❌ MongoDB Connection Failed:", err.message);
       throw err;
     });
 
