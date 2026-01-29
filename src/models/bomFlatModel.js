@@ -392,6 +392,12 @@ const bofMaharastraSchema = new mongoose.Schema({
 // Create unique compound index for clientId and uniqueId
 bofMaharastraSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
 
+// Indexes for faster queries
+bofMaharastraSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+bofMaharastraSchema.index({ clientId: 1, status: 1 }); // For status filtering
+bofMaharastraSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+bofMaharastraSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
+
 // Pre-save middleware to update timestamps
 bofMaharastraSchema.pre('save', function(next) {
     this.updatedAt = new Date();

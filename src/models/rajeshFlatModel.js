@@ -702,5 +702,12 @@ const rajeshFlatSchema = new mongoose.Schema(
 );
 
 rajeshFlatSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
+
+// Indexes for faster queries
+rajeshFlatSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+rajeshFlatSchema.index({ clientId: 1, status: 1 }); // For status filtering
+rajeshFlatSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+rajeshFlatSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
+
 const RajeshFlatModel = mongoose.model("RajeshFlat", rajeshFlatSchema);
 export default RajeshFlatModel;

@@ -34,8 +34,8 @@ const connectDB = async () => {
     .connect(uri, {
       // ===== CONNECTION POOLING =====
       // Optimized for Vercel (serverless) and Render (containerized)
-      maxPoolSize: 10, // Maximum concurrent connections
-      minPoolSize: 2, // Minimum warm connections to maintain
+      maxPoolSize: 50, // Maximum concurrent connections
+      minPoolSize: 10, // Minimum warm connections to maintain
       maxIdleTimeMS: 60000, // Close idle connections after 60s
 
       // ===== TIMEOUT CONFIGURATION =====

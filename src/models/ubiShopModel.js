@@ -458,6 +458,12 @@ const ubiShopSchema = new mongoose.Schema({
 
 ubiShopSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
 
+// Indexes for faster queries
+ubiShopSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+ubiShopSchema.index({ clientId: 1, status: 1 }); // For status filtering
+ubiShopSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+ubiShopSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
+
 ubiShopSchema.post(['find', 'findOne', 'findOneAndUpdate'], function(docs) {
     if (!docs) return docs;
     

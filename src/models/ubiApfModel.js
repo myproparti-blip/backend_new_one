@@ -955,6 +955,12 @@ const ubiApfSchema = new mongoose.Schema({
 });
 ubiApfSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
 
+// Indexes for faster queries
+ubiApfSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+ubiApfSchema.index({ clientId: 1, status: 1 }); // For status filtering
+ubiApfSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+ubiApfSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
+
 ubiApfSchema.pre('save', function (next) {
     this.updatedAt = new Date();
     next();

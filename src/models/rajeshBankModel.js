@@ -529,8 +529,12 @@ const rajeshBankSchema = new mongoose.Schema({
 
 });
 
+// Indexes for faster queries
 rajeshBankSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
-
+rajeshBankSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+rajeshBankSchema.index({ clientId: 1, status: 1 }); // For status filtering
+rajeshBankSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+rajeshBankSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
 
 const RajeshBankModel = mongoose.model("RajeshBank", rajeshBankSchema);
 export default RajeshBankModel;

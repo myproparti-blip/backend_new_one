@@ -318,6 +318,11 @@ const rajeshRowHouseSchema = new mongoose.Schema({
 
 rajeshRowHouseSchema.index({ clientId: 1, uniqueId: 1 }, { unique: true, sparse: true });
 
+// Indexes for faster queries
+rajeshRowHouseSchema.index({ clientId: 1, username: 1 }); // For user-specific queries
+rajeshRowHouseSchema.index({ clientId: 1, status: 1 }); // For status filtering
+rajeshRowHouseSchema.index({ clientId: 1, createdAt: -1 }); // For sorting by creation date
+rajeshRowHouseSchema.index({ clientId: 1, username: 1, status: 1 }); // For combined filtering
 
 const RajeshRowHouseModel = mongoose.model("RajeshRowHouse", rajeshRowHouseSchema);
 export default RajeshRowHouseModel;
